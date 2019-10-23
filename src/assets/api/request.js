@@ -1,5 +1,6 @@
 import axios from 'axios';
 import QS from 'qs';
+import {util} from '../js/util'
 // import store from '../vuex/store'
  
 // 环境的切换
@@ -20,27 +21,32 @@ if (process.env.NODE_ENV == 'development') {
    // 请求拦截器
    axios.interceptors.request.use( 
     config => {
+      util.showLoading()
      // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
      // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
     //  const token = store.state.token;  
     //  token && (config.headers.Authorization = token);  
      return config; 
     }, 
-    error => {  console.log('request error', error)
+    error => {  
+      console.log('request error', error)
      return Promise.error(error); 
     })
     
    // 响应拦截器
    axios.interceptors.response.use( 
     response => {  
-     if (response.status === 200) {   
+     if (response.status === 200) {  
+       console.log(response) 
+      util.hideLoading()
       return Promise.resolve(response);  
      } else {   
+      util.hideLoading()
       return Promise.reject(response);  
      } 
     },
     // 服务器状态码不是200的情况 
-    error => {  
+    error => {
      if (error.response.status) {   
       switch (error.response.status) {    
         case 400:
@@ -100,6 +106,8 @@ if (process.env.NODE_ENV == 'development') {
       }  
      },)  
      .then(res => {   
+      this.util.showLoading()
+
       resolve(res.data);  
      })  
      .catch(err => {   
