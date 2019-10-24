@@ -38,10 +38,26 @@ export default {
       }
       Login(params).then(res=>{
         console.log(res)
-        // if()
+        localStorage.clear()
+        if(res.infoMap.success == true){
+          localStorage.setItem('token', res.infoMap.accountInfo.token )
+          localStorage.setItem('cityId', res.infoMap.accountInfo.cityId)
+          localStorage.setItem('supplierId', res.infoMap.accountInfo.supplierId)
+          localStorage.setItem('uid', res.infoMap.accountInfo.uid)
+          localStorage.setItem('accountType', res.infoMap.accountInfo.accountType)
+          localStorage.setItem('accountPriv', res.infoMap.accountInfo.accountPriv)
+          localStorage.setItem('account', res.infoMap.accountInfo.account)
+          localStorage.setItem('supplierName', res.infoMap.accountInfo.supplierName)
+          localStorage.setItem('realName', res.infoMap.accountInfo.realName)
+          localStorage.setItem('boyAccountManage', res.infoMap.accountInfo.boyAccountManage)
+          localStorage.setItem('orderPriv', res.infoMap.accountInfo.orderPriv)
+          localStorage.setItem('cancelPriv', res.infoMap.accountInfo.cancelPriv)
+          localStorage.setItem('updatePriv', res.infoMap.accountInfo.updatePriv)
+          this.$router.push('./List')
+        }
       })
       .catch(err=>{
-        console.log(err,'err')
+        // console.log(err,'err')
       })
     }
   },

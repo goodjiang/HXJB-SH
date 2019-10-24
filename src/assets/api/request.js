@@ -29,7 +29,7 @@ if (process.env.NODE_ENV == 'development') {
      return config; 
     }, 
     error => {  
-      console.log('request error', error)
+    //   console.log('request error', error)
      return Promise.error(error); 
     })
     
@@ -37,7 +37,7 @@ if (process.env.NODE_ENV == 'development') {
    axios.interceptors.response.use( 
     response => {  
      if (response.status === 200) {  
-       console.log(response) 
+    //    console.log(response) 
       util.hideLoading()
       return Promise.resolve(response);  
      } else {   
@@ -127,7 +127,7 @@ if (process.env.NODE_ENV == 'development') {
     }
      axios.post(url, QS.stringify(params),headers)  
      .then(res => {   
-       console.log(header,'header')
+    //    console.log(header,'header')
       resolve(res.data);  
      })  
      .catch(err => {   
