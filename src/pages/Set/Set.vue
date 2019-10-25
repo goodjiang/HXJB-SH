@@ -40,7 +40,6 @@ export default {
     // 返回上一级
     go(){
       this.$router.go(-1)
-      console.log(1)
     },
     // 跳转到修改密码页面
     gaiPassword(){

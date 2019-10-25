@@ -67,15 +67,22 @@
   </div>
 </template>
 <script>
+import {selectAccountPage} from '../../assets/api/userApi'
 export default {
   name: 'SonList',
   data () {
     return {
-     
+      poiId:''
     }
   },
   mounted(){
-   console.log(1)
+    var data = {
+      poiId:this.poiId,
+      supplierId:localStorage.getItem('supplierId')
+    }
+    selectAccountPage(data).then(res=>{
+      console.log(res)
+    })
 
   },
   methods: {

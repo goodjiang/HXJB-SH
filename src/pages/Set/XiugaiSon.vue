@@ -2,7 +2,7 @@
   <div class="XiugaiSon">
     <!-- 头部信息 -->
     <header class="header">
-      <img src="../../assets/imgs/zuojiantou.png" alt="">
+      <img src="../../assets/imgs/zuojiantou.png" alt="" @click="go">
       <span>添加子账号</span>
     </header>
     <section>
@@ -49,6 +49,14 @@
       <p style="font-size:.24rem;color:#999;padding:.32rem 0 0 .3rem;">其他高级权限请在PC端商户中心完成设置<br>shanghu.51jiabo.com</p>
       <div class="baocunBtn">保存</div>
     </section>
+    <!-- 全部门店 -->
+    <div class="pos" v-if='showMendian'>
+      <div class='mendainName'>
+        <span>我的门店</span>
+        <img src="../../assets/imgs/duigou.png" alt="">
+      </div>
+    </div>
+    
   </div>
 </template>
 <script>
@@ -56,15 +64,17 @@ export default {
   name: 'XiugaiSon',
   data () {
     return {
-     
+     showMendian:false
     }
   },
   mounted(){
-   console.log(1)
 
   },
   methods: {
-   
+    // 跳转到上一级
+   go(){
+     this.$router.go(-1)
+   }
   }
 }
 </script>
@@ -184,6 +194,32 @@ export default {
       position: fixed;
       bottom: .3rem;
       left: 1.15rem;
+    }
+  }
+  .pos{
+    width: 7rem;
+    height: 100%;
+    position: fixed;
+    top:0;
+    background: #fff;
+    z-index: 99;
+    padding: 0 .2rem 2rem .3rem;
+    margin-top: 2.01rem;
+    .mendainName{
+      // background: pink;
+      display: flex;
+      height: .8rem;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      span{
+        font-size: .3rem;
+      }
+      img{
+        width: .4rem;
+        height: .3rem;
+        padding-right: .1rem;
+      }
     }
   }
 }

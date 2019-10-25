@@ -1,7 +1,6 @@
 import axios from 'axios';
 import QS from 'qs';
 import {util} from '../js/util'
-// import store from '../vuex/store'
  
 // 环境的切换
 if (process.env.NODE_ENV == 'development') { 
@@ -15,9 +14,6 @@ if (process.env.NODE_ENV == 'development') {
    // 请求超时时间
    axios.defaults.timeout = 10000;
     
-   // post请求头
-  //  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-  //  console.log(header)
    // 请求拦截器
    axios.interceptors.request.use( 
     config => {
@@ -99,19 +95,20 @@ if (process.env.NODE_ENV == 'development') {
     */
    export function get(url, params){ 
     return new Promise((resolve, reject) =>{  
+     var headers = {
+        'Content-Type' : 'application/json',
+        'token':localStorage.getItem('token')?localStorage.getItem('token'):''
+     }
      axios.get(url, {   
       params: params,
-      headers:{
-        'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
-      }  
-     },)  
+      headers:headers
+     })  
      .then(res => {   
-      this.util.showLoading()
-
-      resolve(res.data);  
+        // this.util.showLoading()
+        resolve(res.data);  
      })  
      .catch(err => {   
-      reject(err.data)  
+        reject(err.data)  
      }) 
     });
    }
@@ -120,15 +117,15 @@ if (process.env.NODE_ENV == 'development') {
     * @param {String} url [请求的url地址] 
     * @param {Object} params [请求时携带的参数] 
     */
-   export function post(url, params,header) { 
+   export function post(url, params) { 
     return new Promise((resolve, reject) => {   
     var headers = {
-      'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
+      'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8',
+      "token":localStorage.getItem('token')?localStorage.getItem('token'):''
     }
-     axios.post(url, QS.stringify(params),headers)  
+     axios.post(url, QS.stringify(params),{headers:headers})  
      .then(res => {   
-    //    console.log(header,'header')
-      resolve(res.data);  
+        resolve(res.data);  
      })  
      .catch(err => {   
       reject(err.data)  
