@@ -42,7 +42,6 @@ export default {
     },
     // 点击确定
     btn(){
-      // console.log(this.ShowError)
       var that = this;
       if(this.pwd.length<6){
         this.ShowError = true;
@@ -51,11 +50,11 @@ export default {
       }else if(this.xinpwd.length<6){
         this.ShowError = true;
         this.ErrorTxt = '请正确输入新密码，不能少于6位';
-        this.timer()
+        this.timer(that)
       }else if(this.xinspwd != this.xinpwd){
         this.ShowError = true;
         this.ErrorTxt = '两次新密码不一致，请重新输入';
-        this.timer()
+        this.timer(that)
       }else{
         var data = {
           password:this.pwd,

@@ -33,13 +33,11 @@ export default {
   },
   mounted(){
     this.account = localStorage.getItem('account')
-    
-
   },
   methods: {
     // 返回上一级
     go(){
-      this.$router.go(-1)
+      this.$router.push('../List')
     },
     // 跳转到修改密码页面
     gaiPassword(){
@@ -51,7 +49,8 @@ export default {
     },
     // 退出登录
     BtnTuichu(){
-      console.log(111)
+      localStorage.clear()      
+      this.$router.push('../Login')
     }
   }
 }

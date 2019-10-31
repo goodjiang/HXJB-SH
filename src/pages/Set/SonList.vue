@@ -3,62 +3,37 @@
     <!-- 头部信息 -->
     <div class="pos">
       <header class="header">
-        <img src="../../assets/imgs/zuojiantou.png" alt="">
+        <img src="../../assets/imgs/zuojiantou.png" alt="" @click='go'>
         <span>子账号管理</span>
       </header>
       <div class="store">
-        <span>选择门店</span>
-        <span style="color:#999">全部<img src="../../assets/imgs/xiarow.png"></span>
+        <span>{{mendianName}}</span>
+        <span style="color:#999" @click='ClickMendian'>全部<img src="../../assets/imgs/xiarow.png"></span>
       </div>
       <p class="storeNum">共3个</p>
     </div>
     
     <section> 
       <div class="storeList">
-        <div class="storeWork">
+        <div class="storeWork" v-for="(item,i) in resultList" :key='i'>
           <div class="wrap">
-            <div class="storeWorkLeft">张三</div>
+            <div class="storeWorkLeft">{{item.realName}}</div>
             <div class="storeWorkRight">
-              <p>子账号:西门子</p>
-              <p>子账号:西门子</p>
-              <p>子账号:西门子</p>
+              <p>子账号:{{item.account}}</p>
+              <p>门店：{{item.poiName}}</p>
+              <p>最后登录时间：{{item.lastLoginTime}}</p>
             </div>
           </div>
           <div class="storeBtn">
-            <span>禁用TA</span>
-            <span>修改</span>
+            <span @click="jinyong(i)" :class="[item.delFlag == 1?'jinyong':'qiyong']">{{item.delFlag ? '禁用TA' : '启用TA'}}</span>
+            <span @click='xiugai(i)'>修改</span>
           </div>
         </div>
       </div>
     </section>
     <!-- 选择的门店定位 -->
-    <div class="mendianduo" v-if="false">
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
-      <p class="mendianduos">11111</p>
+    <div class="mendianduo" v-if='ShowMendian'> 
+      <p class="mendianduos" v-for="(item,i) in shopListAll" :key='i' @click='ClickShop(i)'>{{item.shopName}}</p>
     </div>
     <!-- 底部定位添加子账号 -->
     <div class="addSon">
@@ -67,28 +42,74 @@
   </div>
 </template>
 <script>
-import {selectAccountPage} from '../../assets/api/userApi'
+import {selectAccountPage,deleteBoyAccount} from '../../assets/api/userApi'
 export default {
   name: 'SonList',
   data () {
     return {
-      poiId:''
+      ShowMendian:false,
+      mendianName:'选择门店',   //选择门店的内容
+      poiId:'',
+      shopListAll:'',  //门店的列表
+      resultList:'',  //业务员
+      
     }
   },
   mounted(){
-    var data = {
-      poiId:this.poiId,
-      supplierId:localStorage.getItem('supplierId')
-    }
-    selectAccountPage(data).then(res=>{
-      console.log(res)
-    })
+    this.Sons()
 
   },
   methods: {
+    // 跳转到上一级
+    go(){
+      this.$router.push('../Set/Set')
+    },
     // 跳转到添加子账号的页面
     addSon(){
       this.$router.push('./XiugaiSon')
+    },
+    // 点击显示门店
+    ClickMendian(){
+      this.ShowMendian = true
+    },
+    // 点击门店到门店上面
+    ClickShop(i){
+      this.ShowMendian = false
+      this.mendianName = this.shopListAll[i].shopName
+    },
+    // 禁用/启用
+    jinyong(i){
+      var data = {
+        delFlag: this.resultList[i].delFlag,
+        id: this.resultList[i].id
+      }
+      deleteBoyAccount(data).then(res=>{
+        if(res.infoMap.success == true){
+          // console.log(res,'res')
+          this.Sons()
+        }else{
+          this.util.showAlertPublic(res.infoMap.reason)
+        }
+      })
+    },
+    // 修改
+    xiugai(i){
+      var id = this.resultList[i].id
+      this.$router.push({path:'./XiugaiSon',query:{id:id}})
+    },
+    //列表刷新的接口
+    Sons(){
+      var data = {
+        poiId:this.poiId,
+        supplierId:localStorage.getItem('supplierId')
+      }
+      selectAccountPage(data).then(res=>{
+        // console.log(res)
+        if(res.infoMap.success==true){
+          this.shopListAll = res.infoMap.shopListAll,
+          this.resultList = res.resultList
+        }
+      })
     }
   }
 }
@@ -218,10 +239,18 @@ export default {
             line-height: .55rem;
             border-radius: 2px;
           }
-          span:nth-of-type(1){
+          .jinyong{
             color: #ED4D4F;
+            border: 1px solid #ed4d4f;
+            float: left;
+
+          }
+          .qiyong{
+            color: #2FB768;
+            border: 1px solid #2FB768;
             float: left;
           }
+
           span:nth-of-type(2){
             float: right;
             border-color: #D2D2D2;
@@ -263,7 +292,7 @@ export default {
     left: 0;
     overflow-y: auto;
     height: 100%;
-    margin-top: 2.8rem;
+    margin-top: 2.02rem;
   }
   .mendianduos{
     height: .9rem;

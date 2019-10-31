@@ -2,7 +2,6 @@
   <div class="List">
     <!-- 头部信息 -->
     <div class="header">
-      <img src="../assets/imgs/zuojiantou.png" alt="">
       <span>展商开单</span>
     </div>
     <!-- 设置 -->
@@ -12,10 +11,10 @@
         <span>设置</span>
       </div>
       <p class="name">hi,{{account}}</p>
-      <p class="common btn1" v-if="showList">直接开单（无需上货）<img src="../assets/imgs/rightRow.png" alt=""></p>
+      <p class="common btn1" v-if="showList" @click="ClickList">直接开单（无需上货）<img src="../assets/imgs/rightRow.png" alt=""></p>
       <p class="common btn2" v-if="showOrder">订单管理<img src="../assets/imgs/rightRow.png" alt=""></p>
       <p class="common btn3" v-if="showGuke">顾客管理<img src="../assets/imgs/rightRow.png" alt=""></p>
-      <p class="common btn4" v-if="cancelPriv">SVIP核销<img src="../assets/imgs/rightRow.png" alt=""></p>
+      <p class="common btn4" v-if="cancelPriv" @click="hexiao">SVIP核销<img src="../assets/imgs/rightRow.png" alt=""></p>
       <img src="../assets/imgs/logo.png" class="logo" alt="">
     </div>
   </div>
@@ -37,11 +36,17 @@ export default {
     this.showList = localStorage.getItem('accountPriv')
     this.showOrder = localStorage.getItem('orderPriv')
     this.cancelPriv = localStorage.getItem('cancelPriv')
-
   },
   methods: {
     setting(){
       this.$router.push('./Set/Set')
+    },
+    ClickList(){
+      this.$router.push('./Billing/Billing')
+    },
+    // 进入核销页面
+    hexiao(){
+      this.$router.push('./SvipHexiao')
     }
   }
 }

@@ -30,6 +30,11 @@ export default {
      password:''
     }
   },
+  created(){
+    if(localStorage.getItem('token')){
+      this.$router.push('./List')
+    }
+  },
   methods: {
     LoginBtn(){
       var params = {
@@ -37,7 +42,8 @@ export default {
         'password': this.password
       }
       Login(params).then(res=>{
-        console.log(res)
+        // console.log(res)
+
         localStorage.clear()
         if(res.infoMap.success == true){
           localStorage.setItem('token', res.infoMap.accountInfo.token )
@@ -54,13 +60,15 @@ export default {
           localStorage.setItem('cancelPriv', res.infoMap.accountInfo.cancelPriv)
           localStorage.setItem('updatePriv', res.infoMap.accountInfo.updatePriv)
           this.$router.push('./List')
+        }else{
+          this.util.showAlertPublic(res.infoMap.reason)
         }
       })
       .catch(err=>{
-        // console.log(err,'err')
+          
       })
     }
-  },
+  }
 }
 </script>
 

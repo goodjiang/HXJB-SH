@@ -17,6 +17,7 @@ if (process.env.NODE_ENV == 'development') {
    // 请求拦截器
    axios.interceptors.request.use( 
     config => {
+        console.log(config,'config')
       util.showLoading()
      // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
      // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
@@ -117,18 +118,25 @@ if (process.env.NODE_ENV == 'development') {
     * @param {String} url [请求的url地址] 
     * @param {Object} params [请求时携带的参数] 
     */
-   export function post(url, params) { 
+   export function post(url, params,type) { 
     return new Promise((resolve, reject) => {   
     var headers = {
-      'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8',
+      "Content-Type": type ? 'application/json;charset=utf-8' : 'application/x-www-form-urlencoded;charset=UTF-8',
       "token":localStorage.getItem('token')?localStorage.getItem('token'):''
     }
-     axios.post(url, QS.stringify(params),{headers:headers})  
+    console.log(headers,'headers')
+     axios.post(url, QS.stringify(params),{headers:{
+        "Content-Type": type ? 'application/json;charset=utf-8' : 'application/x-www-form-urlencoded;charset=UTF-8',
+        "token":localStorage.getItem('token')?localStorage.getItem('token'):'',
+        
+     }})  
      .then(res => {   
         resolve(res.data);  
+        // console.log(res,'res')
      })  
      .catch(err => {   
-      reject(err.data)  
-     }) 
+        reject(err.data)  
+        // console.log(err,'err',headers)        
+      }) 
     });
    }

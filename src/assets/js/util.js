@@ -1,4 +1,14 @@
 const util = {
+  //提示弹窗 全局调用：this.util.showAlertPublic("");单文件调用：import {util} from "./util";util.showAlertPublic("")
+  showAlertPublic(content) {
+      let objE = document.createElement("div");
+      let newAlertItem = "<div style='position: fixed;z-index: 10;top: 0;left: 0;bottom: 0;right: 0;margin: auto;width: 100%;height: 100%;z-index: 2019;'><div style='position: absolute;top: 50%;left: 50%;width: 40%;height: 1.04rem;margin-top: -.92rem;margin-left: -20%;padding: 0.08rem 0.16rem;background: #434444;font-size: 0.24rem;border-radius: 6px;color: white;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;-webkit-box-align: center;-ms-flex-align: center;align-items: center;text-align:center'>" + content + "</div></div>";
+      objE.innerHTML = newAlertItem;
+      document.body.appendChild(objE);
+      setTimeout(() => {
+          document.body.removeChild(objE);
+      }, 1000)
+  },
  //loading加载 全局调用：this.util.showLoading("");单文件调用：import {util} from "./util";util.showLoading("")
   showLoading() {
     let objE = document.createElement("div");
@@ -11,6 +21,7 @@ const util = {
   hideLoading() {
     document.body.removeChild(document.getElementById("utilLoading"));
   },
+
 }
 
 export { util }
